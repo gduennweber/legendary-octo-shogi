@@ -4,14 +4,14 @@ public class LegendaryOctoThinker {
 	public int[][] spielfeld;
 	public int[] ichHand;
 	public int[] duHand;
-	
+
 	public LegendaryOctoThinker(int[][] sf, int[] ih, int[] dh) {
 		spielfeld = sf;
 		ichHand = ih;
 		duHand = dh;
-		
+
 	}
-	
+
 	public float evaluatePosition() {
 		float positionValue = 0;
 		for(int i = 0; i < 9; i++) {
@@ -25,18 +25,18 @@ public class LegendaryOctoThinker {
 		for(int i = 0; i < 38; i++) {
 			positionValue += getValueFigur(duHand[i]);
 		}	
-			
-		
+
+
 		return positionValue;
 	}
-	
-	
-	
+
+
+
 	public float getValueFigur(int figur) {
 		switch(figur) {
 		case 0:
 			return 0;
-			
+
 		case 1:
 			return 1000;
 		case 2:
@@ -65,7 +65,7 @@ public class LegendaryOctoThinker {
 			return 8.3f;
 		case 18:
 			return 8.5f;
-		//Gegner	
+			//Gegner	
 		case 21:
 			return -1000;
 		case 22:
@@ -96,6 +96,6 @@ public class LegendaryOctoThinker {
 			return -8.5f;
 		}
 		return -100000;
-		
+
 	}
 }

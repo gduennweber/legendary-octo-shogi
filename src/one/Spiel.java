@@ -24,7 +24,7 @@ public class Spiel {
 		ArrayList<Integer> moves = new ArrayList<>();
 		for (int i=0; i < 9; i++) {
 			for (int j=0; j < 9; j++) {
-				moves.addAll(legalMovesFeld(spielfeld[i][j], j+i*10));
+				moves.addAll(legalMovesFeld(spielfeld[i][j], i*10+j));
 			}
 		}
 		for (int i = 0; i < 38; i++) {
@@ -38,12 +38,14 @@ public class Spiel {
 	public ArrayList<Integer> legalMovesIchHand(int figur){
 		ArrayList<Integer> moves = new ArrayList<>();
 		// Figuren auf der Hand können auf allen leeren Feldern eingesetzt werden
-			for (int i = 0; i < 88; i++) {
-				if (cX(i) < 9 && cY(i) < 9 && spielfeld[cY(i)] [cX(i)] == 0) {
+		for (int i = 0; i < 9; i++) {
+			for(int j = 0; j < 9; j++) {
+				if (spielfeld[i] [j] == 0) {
 					moves.add(figur + 100);
-					moves.add(i);
+					moves.add(i*10 + j);
 				}
 			}
+		}
 		return moves;
 	}
 
