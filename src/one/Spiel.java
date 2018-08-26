@@ -20,7 +20,22 @@ public class Spiel {
 	// Rückgabe: gerade							| ungerade
 	//			 vorherige Position der Figur	| nächste Position der Figur
 	// 			 falls zuvor auf der Hand: Nummer der Figur + 100	 | nächste Position der Figur
-	public ArrayList<Integer> legalMoves() {
+	public ArrayList<Integer> legalMovesIch() {
+		ArrayList<Integer> moves = new ArrayList<>();
+		for (int i=0; i < 9; i++) {
+			for (int j=0; j < 9; j++) {
+				moves.addAll(legalMovesFeld(spielfeld[i][j], i*10+j));
+			}
+		}
+		for (int i = 0; i < 38; i++) {
+			if(ichHand[i] == 0)
+				break;
+			moves.addAll(legalMovesIchHand(ichHand[i]));
+		}
+		return moves;
+	}
+	
+	public ArrayList<Integer> legalMovesDu() {
 		ArrayList<Integer> moves = new ArrayList<>();
 		for (int i=0; i < 9; i++) {
 			for (int j=0; j < 9; j++) {
@@ -53,7 +68,7 @@ public class Spiel {
 	public ArrayList<Integer> legalMovesFeld(int figur, int pos){
 		ArrayList<Integer> moves = new ArrayList<>();
 		switch(figur) {
-		case 12: // Drachenturm
+		case (12): // Drachenturm
 			int z = pos - 11;
 			if (z > 0 && cX(z) < 9 && cY(z) < 9 && 0 == spielfeld[cY(z)] [cX(z)]) {
 				moves.add(pos);
@@ -312,6 +327,11 @@ public class Spiel {
 			break;
 		}
 		return moves;
+	}
+	
+	public int[][] reverseSpielfeld(int[][] sf) {
+		//TODO: drehen + figuren umkehren
+		int[][] rsf = new int[][]
 	}
 
 	public int cX (int p) {

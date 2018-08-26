@@ -4,39 +4,93 @@ public class LegendaryOctoThinker {
 	public int[][] spielfeld;
 	public int[] ichHand;
 	public int[] duHand;
+	public int moveOrigin;
+	public int moveZiel;
 
 	public LegendaryOctoThinker(int[][] sf, int[] ih, int[] dh) {
 		spielfeld = sf;
 		ichHand = ih;
 		duHand = dh;
-
 	}
 
 	public float evaluatePosition() {
+		return evaluatePosition(spielfeld,ichHand, duHand);
+	}
+	
+	public float evaluatePosition(Spiel sp) {
 		float positionValue = 0;
 		for(int i = 0; i < 9; i++) {
 			for(int j = 0; j < 9; j++) {
-				positionValue += getValueFigur(spielfeld[i][j]);
+				positionValue += getValueFigur(sp.spielfeld[i][j]);
 			}
 		}
 		for(int i = 0; i < 38; i++) {
-			positionValue += getValueFigur(ichHand[i]);
+			positionValue += getValueFigur(sp.ichHand[i]);
 		}
 		for(int i = 0; i < 38; i++) {
-			positionValue += getValueFigur(duHand[i]);
+			positionValue += getValueFigur(sp.duHand[i]);
 		}	
-
-
 		return positionValue;
 	}
+	
+	public float alphaBetaMinMax(Spiel sp, int maxTiefe) {
+		Spiel vsp = sp; // Virtual Spiel
+		return alphaBetaMinMax(vsp, -999999999, 999999999, 0, maxTiefe);
+	}
+	
+	public float alphaBetaMinMax(Spiel vsp, float apha, float beta, int tiefe, int maxTiefe) {
+		// Abbruchbedingung
+		if (tiefe == maxTiefe)
+			return evaluatePosition(vsp);
+		
+		
+		
+		   // check if leaf
+		   children = legalMoves(vsp, vih, vdh);
+		   if len(children) == 0
+		      if node is root
+		         bestMove = [] 
+		      return staticEval(node)
 
+		   # initialize bestMove
+		   if node is root
+		      bestMove = operator of first child
+		      # check if there is only one option
+		      if len(children) == 1
+		         return None
 
+		   if it is MAX's turn to move
+		      for child in children
+		         result = alphaBetaMinimax(child, alpha, beta)
+		         if result > alpha
+		            alpha = result
+		            if node is root
+		               bestMove = operator of child
+		         if alpha >= beta
+		            return alpha
+		      return alpha
+
+		   if it is MIN's turn to move
+		      for child in children
+		         result = alphaBetaMinimax(child, alpha, beta)
+		         if result < beta
+		            beta = result
+		            if node is root
+		               bestMove = operator of child
+		         if beta <= alpha
+		            return beta
+		      return beta
+			
+		
+		
+	}
 
 	public float getValueFigur(int figur) {
 		switch(figur) {
+		// Leer
 		case 0:
 			return 0;
-
+		// Ich
 		case 1:
 			return 1000;
 		case 2:
@@ -65,7 +119,7 @@ public class LegendaryOctoThinker {
 			return 8.3f;
 		case 18:
 			return 8.5f;
-			//Gegner	
+		// Gegner	
 		case 21:
 			return -1000;
 		case 22:
@@ -96,6 +150,5 @@ public class LegendaryOctoThinker {
 			return -8.5f;
 		}
 		return -100000;
-
 	}
 }
