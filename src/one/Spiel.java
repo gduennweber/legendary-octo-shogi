@@ -17,20 +17,20 @@ public class Spiel {
 	}
 
 
-	// Rückgabe: gerade							| ungerade
-	//			 vorherige Position der Figur	| nächste Position der Figur
-	// 			 falls zuvor auf der Hand: Nummer der Figur + 100	 | nächste Position der Figur
+	// Rï¿½ckgabe: gerade							| ungerade
+	//			 vorherige Position der Figur	| nï¿½chste Position der Figur
+	// 			 falls zuvor auf der Hand: Nummer der Figur + 100	 | nï¿½chste Position der Figur
 	public ArrayList<Integer> legalMovesIch() {
 		ArrayList<Integer> moves = new ArrayList<>();
 		for (int i=0; i < 9; i++) {
 			for (int j=0; j < 9; j++) {
-				moves.addAll(legalMovesFeld(spielfeld[i][j], i*10+j));
+				moves.addAll(legalMovesIchFeld(spielfeld[i][j], i*10+j));
 			}
 		}
 		for (int i = 0; i < 38; i++) {
 			if(ichHand[i] == 0)
 				break;
-			moves.addAll(legalMovesIchHand(ichHand[i]));
+			moves.addAll(legalMovesHand(ichHand[i]));
 		}
 		return moves;
 	}
@@ -39,20 +39,20 @@ public class Spiel {
 		ArrayList<Integer> moves = new ArrayList<>();
 		for (int i=0; i < 9; i++) {
 			for (int j=0; j < 9; j++) {
-				moves.addAll(legalMovesFeld(spielfeld[i][j], i*10+j));
+				moves.addAll(legalMovesDuFeld(spielfeld[i][j], i*10+j));
 			}
 		}
 		for (int i = 0; i < 38; i++) {
-			if(ichHand[i] == 0)
+			if(duHand[i] == 0)
 				break;
-			moves.addAll(legalMovesIchHand(ichHand[i]));
+			moves.addAll(legalMovesHand(ichHand[i]));
 		}
 		return moves;
 	}
 
-	public ArrayList<Integer> legalMovesIchHand(int figur){
+	public ArrayList<Integer> legalMovesHand(int figur){
 		ArrayList<Integer> moves = new ArrayList<>();
-		// Figuren auf der Hand können auf allen leeren Feldern eingesetzt werden
+		// Figuren auf der Hand kï¿½nnen auf allen leeren Feldern eingesetzt werden
 		for (int i = 0; i < 9; i++) {
 			for(int j = 0; j < 9; j++) {
 				if (spielfeld[i] [j] == 0) {
@@ -64,11 +64,12 @@ public class Spiel {
 		return moves;
 	}
 
+
 	//leer ist null
-	public ArrayList<Integer> legalMovesFeld(int figur, int pos){
+	public ArrayList<Integer> legalMovesIchFeld(int figur, int pos){
 		ArrayList<Integer> moves = new ArrayList<>();
 		switch(figur) {
-		case (12): // Drachenturm
+		case 12: // Drachenturm
 			int z = pos - 11;
 			if (z > 0 && cX(z) < 9 && cY(z) < 9 && 0 == spielfeld[cY(z)] [cX(z)]) {
 				moves.add(pos);
@@ -139,7 +140,7 @@ public class Spiel {
 				z = z -10;
 			}
 			break;
-		case 13: // Drachenläufer
+		case 13: // Drachenlï¿½ufer
 			z = pos - 10;
 			if (z > 0 && cX(z) < 9 && cY(z) < 9 && 0 == spielfeld[cY(z)] [cX(z)]) {
 				moves.add(pos);
@@ -160,7 +161,7 @@ public class Spiel {
 				moves.add(pos);
 				moves.add(z);
 			}
-		case 3: // Läufer
+		case 3: // Lï¿½ufer
 			int zx = cX(pos) + 1 ;
 			int zy = cY(pos) + 1;
 			while(zx >= 0 && zy >= 0 && zx < 9 && zy < 9) {
@@ -278,7 +279,7 @@ public class Spiel {
 				moves.add(z);
 			}
 			break;
-		case 1: //König
+		case 1: //Kï¿½nig
 			z = pos + 9;
 			if (z > 0 && cX(z) < 9 && cY(z) < 9 && 0 == spielfeld[cY(z)] [cX(z)]) {
 				moves.add(pos);
@@ -289,10 +290,10 @@ public class Spiel {
 				moves.add(pos);
 				moves.add(z);
 			}
-		case 15: // Beförderter Silber
-		case 16: // Beförderter Springer
-		case 17: // Beförderte Lanze
-		case 18: // Beförderter Bauer
+		case 15: // Befï¿½rderter Silber
+		case 16: // Befï¿½rderter Springer
+		case 17: // Befï¿½rderte Lanze
+		case 18: // Befï¿½rderter Bauer
 		case 4: // Goldener General
 			z = pos - 11;
 			if (z > 0 && cX(z) < 9 && cY(z) < 9 && 0 == spielfeld[cY(z)] [cX(z)]) {
@@ -328,11 +329,271 @@ public class Spiel {
 		}
 		return moves;
 	}
-	
-	public int[][] reverseSpielfeld(int[][] sf) {
-		//TODO: drehen + figuren umkehren
-		int[][] rsf = new int[][]
+	public ArrayList<Integer> legalMovesDuFeld(int figur, int pos){
+		ArrayList<Integer> moves = new ArrayList<>();
+		switch(figur) {
+		case 32: // Drachenturm
+			int z = pos + 11;
+			if (z > 0 && cX(z) < 9 && cY(z) < 9 && 0 == spielfeld[cY(z)] [cX(z)]) {
+				moves.add(pos);
+				moves.add(z);
+			}
+			z = pos + 9;
+			if (z > 0 && cX(z) < 9 && cY(z) < 9 && 0 == spielfeld[cY(z)] [cX(z)]) {
+				moves.add(pos);
+				moves.add(z);
+			}
+			z = pos - 9;
+			if (z > 0 && cX(z) < 9 && cY(z) < 9 && 0 == spielfeld[cY(z)] [cX(z)]) {
+				moves.add(pos);
+				moves.add(z);
+			}
+			z = pos - 11;
+			if (z > 0 && cX(z) < 9 && cY(z) < 9 && 0 == spielfeld[cY(z)] [cX(z)]) {
+				moves.add(pos);
+				moves.add(z);
+			}		
+		case 22: // Turm
+			z = pos - 1;
+			while(z >= 0 && cX(z) < 9 && cY(z) < 9) {
+				if (spielfeld[cY(z)][cX(z)] < 20 && spielfeld[cY(z)][cX(z)] != 0) {
+					break;
+				}
+				moves.add(pos);
+				moves.add(z);
+				if (spielfeld[cY(z)][cX(z)] > 19) {
+					break;
+				}
+				z--;
+			}
+			z = pos + 1;
+			while(z >= 0 && cX(z) < 9 && cY(z) < 9) {
+				if (spielfeld[cY(z)][cX(z)] < 20 && spielfeld[cY(z)][cX(z)] != 0) {
+					break;
+				}
+				moves.add(pos);
+				moves.add(z);
+				if (spielfeld[cY(z)][cX(z)] > 19) {
+					break;
+				}
+				z++;
+			}
+			z = pos - 10;
+			while(z >= 0 && cX(z) < 9 && cY(z) < 9) {
+				if (spielfeld[cY(z)][cX(z)] < 20 && spielfeld[cY(z)][cX(z)] != 0) {
+					break;
+				}
+				moves.add(pos);
+				moves.add(z);
+				if (spielfeld[cY(z)][cX(z)] > 19) {
+					break;
+				}
+				z = z - 10;
+			}
+			z = pos + 10;
+			while(z >= 0 && cX(z) < 9 && cY(z) < 9) {
+				if (spielfeld[cY(z)][cX(z)] < 20 && spielfeld[cY(z)][cX(z)] != 0) {
+					break;
+				}
+				moves.add(pos);
+				moves.add(z);
+				if (spielfeld[cY(z)][cX(z)] > 19) {
+					break;
+				}
+				z = z + 10;
+			}
+			break;
+		case 33: // Drachenlï¿½ufer
+			z = pos + 10;
+			if (z > 0 && cX(z) < 9 && cY(z) < 9 && 0 == spielfeld[cY(z)] [cX(z)]) {
+				moves.add(pos);
+				moves.add(z);
+			}
+			z = pos + 1;
+			if (z > 0 && cX(z) < 9 && cY(z) < 9 && 0 == spielfeld[cY(z)] [cX(z)]) {
+				moves.add(pos);
+				moves.add(z);
+			}
+			z = pos - 1;
+			if (z > 0 && cX(z) < 9 && cY(z) < 9 && 0 == spielfeld[cY(z)] [cX(z)]) {
+				moves.add(pos);
+				moves.add(z);
+			}
+			z = pos - 10;
+			if (z > 0 && cX(z) < 9 && cY(z) < 9 && 0 == spielfeld[cY(z)] [cX(z)]) {
+				moves.add(pos);
+				moves.add(z);
+			}
+		case 23: // Lï¿½ufer
+			int zx = cX(pos) - 1 ;
+			int zy = cY(pos) - 1;
+			while(zx >= 0 && zy >= 0 && zx < 9 && zy < 9) {
+				if (spielfeld[zy][zx] < 20 && spielfeld[zy][zx] != 0) {
+					break;
+				}
+				moves.add(pos);
+				moves.add(zx + zy*10);
+				if (spielfeld[zy][zx] > 19) {
+					break;
+				}
+				zx--;
+				zy--;
+			}
+			zx = cX(pos) + 1 ;
+			zy = cY(pos) + 1;
+			while(zx >= 0 && zy >= 0 && zx < 9 && zy < 9) {
+				if (spielfeld[zy][zx] < 20 && spielfeld[zy][zx] != 0) {
+					break;
+				}
+				moves.add(pos);
+				moves.add(zx + zy*10);
+				if (spielfeld[zy][zx] > 19) {
+					break;
+				}
+				zx++;
+				zy++;
+			}
+			zx = cX(pos) + 1 ;
+			zy = cY(pos) - 1;
+			while(zx >= 0 && zy >= 0 && zx < 9 && zy < 9) {
+				if (spielfeld[zy][zx] < 20 && spielfeld[zy][zx] != 0) {
+					break;
+				}
+				moves.add(pos);
+				moves.add(zx + zy*10);
+				if (spielfeld[zy][zx] > 19) {
+					break;
+				}
+				zx++;
+				zy--;
+			}
+			zx = cX(pos) - 1 ;
+			zy = cY(pos) + 1;
+			while(zx >= 0 && zy >= 0 && zx < 9 && zy < 9) {
+				if (spielfeld[zy][zx] < 20 && spielfeld[zy][zx] != 0) {
+					break;
+				}
+				moves.add(pos);
+				moves.add(zx + zy*10);
+				if (spielfeld[zy][zx] > 19) {
+					break;
+				}
+				zx--;
+				zy++;
+			}
+			break;
+		case 25: // Silberner General
+			z = pos + 11;
+			if (z > 0 && cX(z) < 9 && cY(z) < 9 && 0 == spielfeld[cY(z)] [cX(z)]) {
+				moves.add(pos);
+				moves.add(z);
+			}
+			z = pos + 10;
+			if (z > 0 && cX(z) < 9 && cY(z) < 9 && 0 == spielfeld[cY(z)] [cX(z)]) {
+				moves.add(pos);
+				moves.add(z);
+			}
+			z = pos + 9;
+			if (z > 0 && cX(z) < 9 && cY(z) < 9 && 0 == spielfeld[cY(z)] [cX(z)]) {
+				moves.add(pos);
+				moves.add(z);
+			}
+			z = pos - 9;
+			if (z > 0 && cX(z) < 9 && cY(z) < 9 && 0 == spielfeld[cY(z)] [cX(z)]) {
+				moves.add(pos);
+				moves.add(z);
+			}
+			z = pos - 11;
+			if (z > 0 && cX(z) < 9 && cY(z) < 9 && 0 == spielfeld[cY(z)] [cX(z)]) {
+				moves.add(pos);
+				moves.add(z);
+			}
+			break;
+		case 26: // Springer
+			z = pos + 21;
+			if (z > 0 && cX(z) < 9 && cY(z) < 9 && spielfeld[cY(z)][cX(z)] == 0) {
+				moves.add(pos);
+				moves.add(z);
+			}
+			z = pos + 19;
+			if (z > 0 && cX(z) < 9 && cY(z) < 9 && spielfeld[cY(z)][cX(z)] == 0) {
+				moves.add(pos);
+				moves.add(z);
+			}
+			break;
+		case 27: // Lanze
+			z = pos + 10;
+			while(z >= 0 && cX(z) < 9 && cY(z) < 9) {
+				if (spielfeld[cY(z)][cX(z)] < 20 && spielfeld[cY(z)][cX(z)] != 0) {
+					break;
+				}
+				moves.add(pos);
+				moves.add(z);
+				if (spielfeld[cY(z)][cX(z)] > 19) {
+					break;
+				}
+				z += +10;
+			}
+			break;
+		case 28: // Bauer
+			z = pos + 10;
+			if(z >= 0 && cX(z) < 9 && cY(z) < 9 && (spielfeld[cY(z)][cX(z)] == 0 || spielfeld[cY(z)][cX(z)] > 19)) {
+				moves.add(pos);
+				moves.add(z);
+			}
+			break;
+		case 21: //Kï¿½nig
+			z = pos - 9;
+			if (z > 0 && cX(z) < 9 && cY(z) < 9 && 0 == spielfeld[cY(z)] [cX(z)]) {
+				moves.add(pos);
+				moves.add(z);
+			}
+			z = pos - 11;
+			if (z > 0 && cX(z) < 9 && cY(z) < 9 && 0 == spielfeld[cY(z)] [cX(z)]) {
+				moves.add(pos);
+				moves.add(z);
+			}
+		case 35: // Befï¿½rderter Silber
+		case 36: // Befï¿½rderter Springer
+		case 37: // Befï¿½rderte Lanze
+		case 38: // Befï¿½rderter Bauer
+		case 24: // Goldener General
+			z = pos + 11;
+			if (z > 0 && cX(z) < 9 && cY(z) < 9 && 0 == spielfeld[cY(z)] [cX(z)]) {
+				moves.add(pos);
+				moves.add(z);
+			}
+			z = pos + 10;
+			if (z > 0 && cX(z) < 9 && cY(z) < 9 && 0 == spielfeld[cY(z)] [cX(z)]) {
+				moves.add(pos);
+				moves.add(z);
+			}
+			z = pos + 9;
+			if (z > 0 && cX(z) < 9 && cY(z) < 9 && 0 == spielfeld[cY(z)] [cX(z)]) {
+				moves.add(pos);
+				moves.add(z);
+			}
+			z = pos + 1;
+			if (z > 0 && cX(z) < 9 && cY(z) < 9 && 0 == spielfeld[cY(z)] [cX(z)]) {
+				moves.add(pos);
+				moves.add(z);
+			}
+			z = pos - 1;
+			if (z > 0 && cX(z) < 9 && cY(z) < 9 && 0 == spielfeld[cY(z)] [cX(z)]) {
+				moves.add(pos);
+				moves.add(z);
+			}
+			z = pos - 10;
+			if (z > 0 && cX(z) < 9 && cY(z) < 9 && 0 == spielfeld[cY(z)] [cX(z)]) {
+				moves.add(pos);
+				moves.add(z);
+			}
+			break;
+		}
+		return moves;
 	}
+	
+
 
 	public int cX (int p) {
 		return p % 10;

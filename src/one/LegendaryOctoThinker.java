@@ -12,10 +12,6 @@ public class LegendaryOctoThinker {
 		ichHand = ih;
 		duHand = dh;
 	}
-
-	public float evaluatePosition() {
-		return evaluatePosition(spielfeld,ichHand, duHand);
-	}
 	
 	public float evaluatePosition(Spiel sp) {
 		float positionValue = 0;
@@ -43,7 +39,9 @@ public class LegendaryOctoThinker {
 		if (tiefe == maxTiefe)
 			return evaluatePosition(vsp);
 		
+	return  0;}
 		
+/*		
 		
 		   // check if leaf
 		   children = legalMoves(vsp, vih, vdh);
@@ -84,7 +82,7 @@ public class LegendaryOctoThinker {
 		
 		
 	}
-
+*/
 	public float getValueFigur(int figur) {
 		switch(figur) {
 		// Leer
