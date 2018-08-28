@@ -1,5 +1,9 @@
 package one;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.lang.Cloneable;
+
 public class LegendaryOctoThinker {
 	public int[][] spielfeld;
 	public int[] ichHand;
@@ -8,11 +12,18 @@ public class LegendaryOctoThinker {
 	public int moveZiel;
 
 	public LegendaryOctoThinker(int[][] sf, int[] ih, int[] dh) {
-		spielfeld = sf;
-		ichHand = ih;
-		duHand = dh;
+		spielfeld = sf.clone();
+		ichHand = ih.clone();
+		duHand = dh.clone();
 	}
-	
+
+	public LegendaryOctoThinker clone() {
+		LegendaryOctoThinker lot = new LegendaryOctoThinker(this.spielfeld, this.ichHand, this.duHand);
+		lot.moveOrigin = this.moveOrigin;
+		lot.moveZiel = this.moveZiel;
+		return lot;
+	}
+
 	public float evaluatePosition(Spiel sp) {
 		float positionValue = 0;
 		for(int i = 0; i < 9; i++) {
@@ -28,48 +39,79 @@ public class LegendaryOctoThinker {
 		}	
 		return positionValue;
 	}
-	
-	public float alphaBetaMinMax(Spiel sp, int maxTiefe) {
-		Spiel vsp = sp; // Virtual Spiel
-		return alphaBetaMinMax(vsp, -999999999, 999999999, 0, maxTiefe);
+
+	public float alphaBetaMinMax(Spiel sp, int maxTiefe, boolean ich) {
+		Spiel spiel = sp.clone(); // Virtual Spiel
+		return alphaBetaMinMax(spiel, spiel, -999999999.0f, 999999999.0f, 0, maxTiefe, ich);
 	}
-	
-	public float alphaBetaMinMax(Spiel vsp, float apha, float beta, int tiefe, int maxTiefe) {
+
+	public float alphaBetaMinMax(Spiel spiel, Spiel vsp, float alpha, float beta, int tiefe, int maxTiefe, boolean isMax) {
 		// Abbruchbedingung
 		if (tiefe == maxTiefe)
-			return evaluatePosition(vsp);
-		
-	return  0;}
-		
-/*		
-		
-		   // check if leaf
-		   children = legalMoves(vsp, vih, vdh);
-		   if len(children) == 0
-		      if node is root
-		         bestMove = [] 
-		      return staticEval(node)
+			return evaluatePosition(spiel);
 
-		   # initialize bestMove
-		   if node is root
-		      bestMove = operator of first child
-		      # check if there is only one option
-		      if len(children) == 1
-		         return None
+		// check if leaf
+		ArrayList<Integer> children = new ArrayList<>();
+		if(isMax)
+			children = spiel.legalMovesIch();
+		else
+			children = spiel.legalMovesDu();
 
-		   if it is MAX's turn to move
-		      for child in children
-		         result = alphaBetaMinimax(child, alpha, beta)
-		         if result > alpha
-		            alpha = result
-		            if node is root
-		               bestMove = operator of child
-		         if alpha >= beta
-		            return alpha
-		      return alpha
 
-		   if it is MIN's turn to move
-		      for child in children
+
+		if (children.size() == 0) {
+			if (tiefe == 0) {
+				moveOrigin = -1;
+				moveZiel = -1;
+				return evaluatePosition(spiel);
+			}
+		}
+
+		// initialize bestMove
+		if (tiefe == 0 && children.size() == 2){
+			moveOrigin = children.get(0);
+			moveZiel = children.get(1);
+			return evaluatePosition(spiel);
+		}
+
+
+		if(isMax) {
+			for (int i = 0; i < children.size(); i+=2) {
+				vsp = spiel.clone();
+				vsp.doMove(children.get(i), children.get(i+1));
+				float result = alphaBetaMinMax(vsp, vsp, alpha, beta, tiefe + 1, maxTiefe, !isMax);
+				if (result > alpha) {
+					alpha = result;
+					if (tiefe == 0) {
+						moveOrigin = children.get(i);
+						moveZiel = children.get(i+1);
+					}
+				}
+				if (alpha >= beta)
+					return alpha;
+			}
+			return alpha;
+		}
+
+		else {
+			for (int i = 0; i < children.size(); i+=2) {
+				vsp = spiel.clone();
+				vsp.doMove(children.get(i), children.get(i+1));
+				float result = alphaBetaMinMax(vsp, vsp, alpha, beta, tiefe + 1, maxTiefe, !isMax);
+				if (result < beta) {
+					beta = result;
+					if (tiefe == 0) {
+						moveOrigin = children.get(i);
+						moveZiel = children.get(i+1);
+					}
+				}
+				if (beta <= alpha)
+					return beta;
+			}
+			return beta;
+		}
+	}
+	/*for child in children{
 		         result = alphaBetaMinimax(child, alpha, beta)
 		         if result < beta
 		            beta = result
@@ -77,18 +119,19 @@ public class LegendaryOctoThinker {
 		               bestMove = operator of child
 		         if beta <= alpha
 		            return beta
+		   }
 		      return beta
-			
-		
-		
-	}
-*/
+		   }*/
+
+
+
+
 	public float getValueFigur(int figur) {
 		switch(figur) {
 		// Leer
 		case 0:
 			return 0;
-		// Ich
+			// Ich
 		case 1:
 			return 1000;
 		case 2:
@@ -117,7 +160,7 @@ public class LegendaryOctoThinker {
 			return 8.3f;
 		case 18:
 			return 8.5f;
-		// Gegner	
+			// Gegner	
 		case 21:
 			return -1000;
 		case 22:

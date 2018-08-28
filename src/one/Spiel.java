@@ -16,6 +16,37 @@ public class Spiel {
 		lot = new LegendaryOctoThinker(spielfeld, ichHand, duHand);
 	}
 
+	public Spiel clone() {
+		Spiel spiel = new Spiel();
+		spiel.spielfeld = this.spielfeld.clone();
+		spiel.ichHand = this.ichHand.clone();
+		spiel.duHand = this.duHand.clone();
+		spiel.lot = this.lot.clone();
+		return spiel;
+	}
+
+	public void doMove(int moveOrigin, int moveZiel) {
+		//System.out.println(moveOrigin + "   --   " + moveZiel);
+		if (moveOrigin < 100) {
+			for(int i = 0; i < 38; i ++) {
+				if(ichHand[i] == 0) {
+					ichHand[i] = spielfeld[cY(moveZiel)][cX(moveZiel)];
+					break;
+				}
+			}
+			spielfeld[cY(moveZiel)][cX(moveZiel)] = spielfeld[cY(moveOrigin)][cX(moveOrigin)];
+			spielfeld[cY(moveOrigin)][cX(moveOrigin)] = 0;
+		}
+		else {
+			spielfeld[cY(moveZiel)][cX(moveZiel)] = moveOrigin - 100;
+			for(int i = 0; i < 38; i ++) {
+				if(ichHand[i] == moveOrigin - 100) {
+					ichHand[i] = 0;
+					break;
+				}
+			}
+		}
+	}
 
 	// R�ckgabe: gerade							| ungerade
 	//			 vorherige Position der Figur	| n�chste Position der Figur
@@ -34,7 +65,7 @@ public class Spiel {
 		}
 		return moves;
 	}
-	
+
 	public ArrayList<Integer> legalMovesDu() {
 		ArrayList<Integer> moves = new ArrayList<>();
 		for (int i=0; i < 9; i++) {
@@ -71,22 +102,22 @@ public class Spiel {
 		switch(figur) {
 		case 12: // Drachenturm
 			int z = pos - 11;
-			if (z > 0 && cX(z) < 9 && cY(z) < 9 && 0 == spielfeld[cY(z)] [cX(z)]) {
+			if (z > 0 && cX(z) < 9 && cY(z) < 9 && (0 == spielfeld[cY(z)] [cX(z)] || spielfeld[cY(z)] [cX(z)] > 20)) {
 				moves.add(pos);
 				moves.add(z);
 			}
 			z = pos - 9;
-			if (z > 0 && cX(z) < 9 && cY(z) < 9 && 0 == spielfeld[cY(z)] [cX(z)]) {
+			if (z > 0 && cX(z) < 9 && cY(z) < 9 && (0 == spielfeld[cY(z)] [cX(z)] || spielfeld[cY(z)] [cX(z)] > 20)) {
 				moves.add(pos);
 				moves.add(z);
 			}
 			z = pos + 9;
-			if (z > 0 && cX(z) < 9 && cY(z) < 9 && 0 == spielfeld[cY(z)] [cX(z)]) {
+			if (z > 0 && cX(z) < 9 && cY(z) < 9 && (0 == spielfeld[cY(z)] [cX(z)] || spielfeld[cY(z)] [cX(z)] > 20)) {
 				moves.add(pos);
 				moves.add(z);
 			}
 			z = pos + 11;
-			if (z > 0 && cX(z) < 9 && cY(z) < 9 && 0 == spielfeld[cY(z)] [cX(z)]) {
+			if (z > 0 && cX(z) < 9 && cY(z) < 9 && (0 == spielfeld[cY(z)] [cX(z)] || spielfeld[cY(z)] [cX(z)] > 20)) {
 				moves.add(pos);
 				moves.add(z);
 			}		
@@ -142,22 +173,22 @@ public class Spiel {
 			break;
 		case 13: // Drachenl�ufer
 			z = pos - 10;
-			if (z > 0 && cX(z) < 9 && cY(z) < 9 && 0 == spielfeld[cY(z)] [cX(z)]) {
+			if (z > 0 && cX(z) < 9 && cY(z) < 9 && (0 == spielfeld[cY(z)] [cX(z)] || spielfeld[cY(z)] [cX(z)] > 20)) {
 				moves.add(pos);
 				moves.add(z);
 			}
 			z = pos - 1;
-			if (z > 0 && cX(z) < 9 && cY(z) < 9 && 0 == spielfeld[cY(z)] [cX(z)]) {
+			if (z > 0 && cX(z) < 9 && cY(z) < 9 && (0 == spielfeld[cY(z)] [cX(z)] || spielfeld[cY(z)] [cX(z)] > 20)) {
 				moves.add(pos);
 				moves.add(z);
 			}
 			z = pos + 1;
-			if (z > 0 && cX(z) < 9 && cY(z) < 9 && 0 == spielfeld[cY(z)] [cX(z)]) {
+			if (z > 0 && cX(z) < 9 && cY(z) < 9 && (0 == spielfeld[cY(z)] [cX(z)] || spielfeld[cY(z)] [cX(z)] > 20)) {
 				moves.add(pos);
 				moves.add(z);
 			}
 			z = pos + 10;
-			if (z > 0 && cX(z) < 9 && cY(z) < 9 && 0 == spielfeld[cY(z)] [cX(z)]) {
+			if (z > 0 && cX(z) < 9 && cY(z) < 9 && (0 == spielfeld[cY(z)] [cX(z)] || spielfeld[cY(z)] [cX(z)] > 20)) {
 				moves.add(pos);
 				moves.add(z);
 			}
@@ -221,39 +252,39 @@ public class Spiel {
 			break;
 		case 5: // Silberner General
 			z = pos - 11;
-			if (z > 0 && cX(z) < 9 && cY(z) < 9 && 0 == spielfeld[cY(z)] [cX(z)]) {
+			if (z > 0 && cX(z) < 9 && cY(z) < 9 && (0 == spielfeld[cY(z)] [cX(z)] || spielfeld[cY(z)] [cX(z)] > 20)) {
 				moves.add(pos);
 				moves.add(z);
 			}
 			z = pos - 10;
-			if (z > 0 && cX(z) < 9 && cY(z) < 9 && 0 == spielfeld[cY(z)] [cX(z)]) {
+			if (z > 0 && cX(z) < 9 && cY(z) < 9 && (0 == spielfeld[cY(z)] [cX(z)] || spielfeld[cY(z)] [cX(z)] > 20)) {
 				moves.add(pos);
 				moves.add(z);
 			}
 			z = pos - 9;
-			if (z > 0 && cX(z) < 9 && cY(z) < 9 && 0 == spielfeld[cY(z)] [cX(z)]) {
+			if (z > 0 && cX(z) < 9 && cY(z) < 9 && (0 == spielfeld[cY(z)] [cX(z)] || spielfeld[cY(z)] [cX(z)] > 20)) {
 				moves.add(pos);
 				moves.add(z);
 			}
 			z = pos + 9;
-			if (z > 0 && cX(z) < 9 && cY(z) < 9 && 0 == spielfeld[cY(z)] [cX(z)]) {
+			if (z > 0 && cX(z) < 9 && cY(z) < 9 && (0 == spielfeld[cY(z)] [cX(z)] || spielfeld[cY(z)] [cX(z)] > 20)) {
 				moves.add(pos);
 				moves.add(z);
 			}
 			z = pos + 11;
-			if (z > 0 && cX(z) < 9 && cY(z) < 9 && 0 == spielfeld[cY(z)] [cX(z)]) {
+			if (z > 0 && cX(z) < 9 && cY(z) < 9 && (0 == spielfeld[cY(z)] [cX(z)] || spielfeld[cY(z)] [cX(z)] > 20)) {
 				moves.add(pos);
 				moves.add(z);
 			}
 			break;
 		case 6: // Springer
 			z = pos - 21;
-			if (z > 0 && cX(z) < 9 && cY(z) < 9 && spielfeld[cY(z)][cX(z)] == 0) {
+			if (z > 0 && cX(z) < 9 && cY(z) < 9 && (0 == spielfeld[cY(z)] [cX(z)] || spielfeld[cY(z)] [cX(z)] > 20)) {
 				moves.add(pos);
 				moves.add(z);
 			}
 			z = pos - 19;
-			if (z > 0 && cX(z) < 9 && cY(z) < 9 && spielfeld[cY(z)][cX(z)] == 0) {
+			if (z > 0 && cX(z) < 9 && cY(z) < 9 && (0 == spielfeld[cY(z)] [cX(z)] || spielfeld[cY(z)] [cX(z)] > 20)) {
 				moves.add(pos);
 				moves.add(z);
 			}
@@ -281,12 +312,12 @@ public class Spiel {
 			break;
 		case 1: //K�nig
 			z = pos + 9;
-			if (z > 0 && cX(z) < 9 && cY(z) < 9 && 0 == spielfeld[cY(z)] [cX(z)]) {
+			if (z > 0 && cX(z) < 9 && cY(z) < 9 && (0 == spielfeld[cY(z)] [cX(z)] || spielfeld[cY(z)] [cX(z)] > 20)) {
 				moves.add(pos);
 				moves.add(z);
 			}
 			z = pos + 11;
-			if (z > 0 && cX(z) < 9 && cY(z) < 9 && 0 == spielfeld[cY(z)] [cX(z)]) {
+			if (z > 0 && cX(z) < 9 && cY(z) < 9 && (0 == spielfeld[cY(z)] [cX(z)] || spielfeld[cY(z)] [cX(z)] > 20)) {
 				moves.add(pos);
 				moves.add(z);
 			}
@@ -296,32 +327,32 @@ public class Spiel {
 		case 18: // Bef�rderter Bauer
 		case 4: // Goldener General
 			z = pos - 11;
-			if (z > 0 && cX(z) < 9 && cY(z) < 9 && 0 == spielfeld[cY(z)] [cX(z)]) {
+			if (z > 0 && cX(z) < 9 && cY(z) < 9 && (0 == spielfeld[cY(z)] [cX(z)] || spielfeld[cY(z)] [cX(z)] > 20)) {
 				moves.add(pos);
 				moves.add(z);
 			}
 			z = pos - 10;
-			if (z > 0 && cX(z) < 9 && cY(z) < 9 && 0 == spielfeld[cY(z)] [cX(z)]) {
+			if (z > 0 && cX(z) < 9 && cY(z) < 9 && (0 == spielfeld[cY(z)] [cX(z)] || spielfeld[cY(z)] [cX(z)] > 20)) {
 				moves.add(pos);
 				moves.add(z);
 			}
 			z = pos - 9;
-			if (z > 0 && cX(z) < 9 && cY(z) < 9 && 0 == spielfeld[cY(z)] [cX(z)]) {
+			if (z > 0 && cX(z) < 9 && cY(z) < 9 && (0 == spielfeld[cY(z)] [cX(z)] || spielfeld[cY(z)] [cX(z)] > 20)) {
 				moves.add(pos);
 				moves.add(z);
 			}
 			z = pos - 1;
-			if (z > 0 && cX(z) < 9 && cY(z) < 9 && 0 == spielfeld[cY(z)] [cX(z)]) {
+			if (z > 0 && cX(z) < 9 && cY(z) < 9 && (0 == spielfeld[cY(z)] [cX(z)] || spielfeld[cY(z)] [cX(z)] > 20)) {
 				moves.add(pos);
 				moves.add(z);
 			}
 			z = pos + 1;
-			if (z > 0 && cX(z) < 9 && cY(z) < 9 && 0 == spielfeld[cY(z)] [cX(z)]) {
+			if (z > 0 && cX(z) < 9 && cY(z) < 9 && (0 == spielfeld[cY(z)] [cX(z)] || spielfeld[cY(z)] [cX(z)] > 20)) {
 				moves.add(pos);
 				moves.add(z);
 			}
 			z = pos + 10;
-			if (z > 0 && cX(z) < 9 && cY(z) < 9 && 0 == spielfeld[cY(z)] [cX(z)]) {
+			if (z > 0 && cX(z) < 9 && cY(z) < 9 && (0 == spielfeld[cY(z)] [cX(z)] || spielfeld[cY(z)] [cX(z)] > 20)) {
 				moves.add(pos);
 				moves.add(z);
 			}
@@ -334,70 +365,70 @@ public class Spiel {
 		switch(figur) {
 		case 32: // Drachenturm
 			int z = pos + 11;
-			if (z > 0 && cX(z) < 9 && cY(z) < 9 && 0 == spielfeld[cY(z)] [cX(z)]) {
+			if (z > -1 && cX(z) < 9 && cY(z) < 9 && spielfeld[cY(z)] [cX(z)] < 20) {
 				moves.add(pos);
 				moves.add(z);
 			}
 			z = pos + 9;
-			if (z > 0 && cX(z) < 9 && cY(z) < 9 && 0 == spielfeld[cY(z)] [cX(z)]) {
+			if (z > -1 && cX(z) < 9 && cY(z) < 9 && spielfeld[cY(z)] [cX(z)] < 20) {
 				moves.add(pos);
 				moves.add(z);
 			}
 			z = pos - 9;
-			if (z > 0 && cX(z) < 9 && cY(z) < 9 && 0 == spielfeld[cY(z)] [cX(z)]) {
+			if (z > -1 && cX(z) < 9 && cY(z) < 9 && spielfeld[cY(z)] [cX(z)] < 20) {
 				moves.add(pos);
 				moves.add(z);
 			}
 			z = pos - 11;
-			if (z > 0 && cX(z) < 9 && cY(z) < 9 && 0 == spielfeld[cY(z)] [cX(z)]) {
+			if (z > -1 && cX(z) < 9 && cY(z) < 9 && spielfeld[cY(z)] [cX(z)] < 20) {
 				moves.add(pos);
 				moves.add(z);
 			}		
 		case 22: // Turm
 			z = pos - 1;
 			while(z >= 0 && cX(z) < 9 && cY(z) < 9) {
-				if (spielfeld[cY(z)][cX(z)] < 20 && spielfeld[cY(z)][cX(z)] != 0) {
+				if (spielfeld[cY(z)][cX(z)] > 20) {
 					break;
 				}
 				moves.add(pos);
 				moves.add(z);
-				if (spielfeld[cY(z)][cX(z)] > 19) {
+				if (spielfeld[cY(z)][cX(z)] < 20 && spielfeld[cY(z)][cX(z)] != 0) {
 					break;
 				}
 				z--;
 			}
 			z = pos + 1;
 			while(z >= 0 && cX(z) < 9 && cY(z) < 9) {
-				if (spielfeld[cY(z)][cX(z)] < 20 && spielfeld[cY(z)][cX(z)] != 0) {
+				if (spielfeld[cY(z)][cX(z)] > 20) {
 					break;
 				}
 				moves.add(pos);
 				moves.add(z);
-				if (spielfeld[cY(z)][cX(z)] > 19) {
+				if (spielfeld[cY(z)][cX(z)] < 20 && spielfeld[cY(z)][cX(z)] != 0) {
 					break;
 				}
 				z++;
 			}
 			z = pos - 10;
 			while(z >= 0 && cX(z) < 9 && cY(z) < 9) {
-				if (spielfeld[cY(z)][cX(z)] < 20 && spielfeld[cY(z)][cX(z)] != 0) {
+				if (spielfeld[cY(z)][cX(z)] > 20) {
 					break;
 				}
 				moves.add(pos);
 				moves.add(z);
-				if (spielfeld[cY(z)][cX(z)] > 19) {
+				if (spielfeld[cY(z)][cX(z)] < 20 && spielfeld[cY(z)][cX(z)] != 0) {
 					break;
 				}
 				z = z - 10;
 			}
 			z = pos + 10;
 			while(z >= 0 && cX(z) < 9 && cY(z) < 9) {
-				if (spielfeld[cY(z)][cX(z)] < 20 && spielfeld[cY(z)][cX(z)] != 0) {
+				if (spielfeld[cY(z)][cX(z)] > 20) {
 					break;
 				}
 				moves.add(pos);
 				moves.add(z);
-				if (spielfeld[cY(z)][cX(z)] > 19) {
+				if (spielfeld[cY(z)][cX(z)] < 20 && spielfeld[cY(z)][cX(z)] != 0) {
 					break;
 				}
 				z = z + 10;
@@ -405,22 +436,22 @@ public class Spiel {
 			break;
 		case 33: // Drachenl�ufer
 			z = pos + 10;
-			if (z > 0 && cX(z) < 9 && cY(z) < 9 && 0 == spielfeld[cY(z)] [cX(z)]) {
+			if (z > -1 && cX(z) < 9 && cY(z) < 9 && spielfeld[cY(z)][cX(z)] < 20) {
 				moves.add(pos);
 				moves.add(z);
 			}
 			z = pos + 1;
-			if (z > 0 && cX(z) < 9 && cY(z) < 9 && 0 == spielfeld[cY(z)] [cX(z)]) {
+			if (z > -1 && cX(z) < 9 && cY(z) < 9 && spielfeld[cY(z)][cX(z)] < 20) {
 				moves.add(pos);
 				moves.add(z);
 			}
 			z = pos - 1;
-			if (z > 0 && cX(z) < 9 && cY(z) < 9 && 0 == spielfeld[cY(z)] [cX(z)]) {
+			if (z > -1 && cX(z) < 9 && cY(z) < 9 && spielfeld[cY(z)][cX(z)] < 20) {
 				moves.add(pos);
 				moves.add(z);
 			}
 			z = pos - 10;
-			if (z > 0 && cX(z) < 9 && cY(z) < 9 && 0 == spielfeld[cY(z)] [cX(z)]) {
+			if (z > -1 && cX(z) < 9 && cY(z) < 9 && spielfeld[cY(z)][cX(z)] < 20) {
 				moves.add(pos);
 				moves.add(z);
 			}
@@ -428,12 +459,12 @@ public class Spiel {
 			int zx = cX(pos) - 1 ;
 			int zy = cY(pos) - 1;
 			while(zx >= 0 && zy >= 0 && zx < 9 && zy < 9) {
-				if (spielfeld[zy][zx] < 20 && spielfeld[zy][zx] != 0) {
+				if (spielfeld[zy][zx] > 19) {
 					break;
 				}
 				moves.add(pos);
 				moves.add(zx + zy*10);
-				if (spielfeld[zy][zx] > 19) {
+				if (spielfeld[zy][zx] < 20 && spielfeld[zy][zx] != 0) {
 					break;
 				}
 				zx--;
@@ -442,12 +473,12 @@ public class Spiel {
 			zx = cX(pos) + 1 ;
 			zy = cY(pos) + 1;
 			while(zx >= 0 && zy >= 0 && zx < 9 && zy < 9) {
-				if (spielfeld[zy][zx] < 20 && spielfeld[zy][zx] != 0) {
+				if (spielfeld[zy][zx] > 19) {
 					break;
 				}
 				moves.add(pos);
 				moves.add(zx + zy*10);
-				if (spielfeld[zy][zx] > 19) {
+				if (spielfeld[zy][zx] < 20 && spielfeld[zy][zx] != 0) {
 					break;
 				}
 				zx++;
@@ -456,12 +487,12 @@ public class Spiel {
 			zx = cX(pos) + 1 ;
 			zy = cY(pos) - 1;
 			while(zx >= 0 && zy >= 0 && zx < 9 && zy < 9) {
-				if (spielfeld[zy][zx] < 20 && spielfeld[zy][zx] != 0) {
+				if (spielfeld[zy][zx] > 19) {
 					break;
 				}
 				moves.add(pos);
 				moves.add(zx + zy*10);
-				if (spielfeld[zy][zx] > 19) {
+				if (spielfeld[zy][zx] < 20 && spielfeld[zy][zx] != 0) {
 					break;
 				}
 				zx++;
@@ -470,12 +501,12 @@ public class Spiel {
 			zx = cX(pos) - 1 ;
 			zy = cY(pos) + 1;
 			while(zx >= 0 && zy >= 0 && zx < 9 && zy < 9) {
-				if (spielfeld[zy][zx] < 20 && spielfeld[zy][zx] != 0) {
+				if (spielfeld[zy][zx] > 19) {
 					break;
 				}
 				moves.add(pos);
 				moves.add(zx + zy*10);
-				if (spielfeld[zy][zx] > 19) {
+				if (spielfeld[zy][zx] < 20 && spielfeld[zy][zx] != 0) {
 					break;
 				}
 				zx--;
@@ -484,52 +515,52 @@ public class Spiel {
 			break;
 		case 25: // Silberner General
 			z = pos + 11;
-			if (z > 0 && cX(z) < 9 && cY(z) < 9 && 0 == spielfeld[cY(z)] [cX(z)]) {
+			if (z > -1 && cX(z) < 9 && cY(z) < 9 && spielfeld[cY(z)][cX(z)] < 20) {
 				moves.add(pos);
 				moves.add(z);
 			}
 			z = pos + 10;
-			if (z > 0 && cX(z) < 9 && cY(z) < 9 && 0 == spielfeld[cY(z)] [cX(z)]) {
+			if (z > -1 && cX(z) < 9 && cY(z) < 9 && spielfeld[cY(z)][cX(z)] < 20) {
 				moves.add(pos);
 				moves.add(z);
 			}
 			z = pos + 9;
-			if (z > 0 && cX(z) < 9 && cY(z) < 9 && 0 == spielfeld[cY(z)] [cX(z)]) {
+			if (z > -1 && cX(z) < 9 && cY(z) < 9 && spielfeld[cY(z)][cX(z)] < 20) {
 				moves.add(pos);
 				moves.add(z);
 			}
 			z = pos - 9;
-			if (z > 0 && cX(z) < 9 && cY(z) < 9 && 0 == spielfeld[cY(z)] [cX(z)]) {
+			if (z > -1 && cX(z) < 9 && cY(z) < 9 && spielfeld[cY(z)][cX(z)] < 20) {
 				moves.add(pos);
 				moves.add(z);
 			}
 			z = pos - 11;
-			if (z > 0 && cX(z) < 9 && cY(z) < 9 && 0 == spielfeld[cY(z)] [cX(z)]) {
+			if (z > -1 && cX(z) < 9 && cY(z) < 9 && spielfeld[cY(z)][cX(z)] < 20) {
 				moves.add(pos);
 				moves.add(z);
 			}
 			break;
 		case 26: // Springer
 			z = pos + 21;
-			if (z > 0 && cX(z) < 9 && cY(z) < 9 && spielfeld[cY(z)][cX(z)] == 0) {
+			if (z > -1 && cX(z) < 9 && cY(z) < 9 && spielfeld[cY(z)][cX(z)] < 20) {
 				moves.add(pos);
 				moves.add(z);
 			}
 			z = pos + 19;
-			if (z > 0 && cX(z) < 9 && cY(z) < 9 && spielfeld[cY(z)][cX(z)] == 0) {
+			if (z > -1 && cX(z) < 9 && cY(z) < 9 && spielfeld[cY(z)][cX(z)] < 20) {
 				moves.add(pos);
 				moves.add(z);
 			}
 			break;
 		case 27: // Lanze
 			z = pos + 10;
-			while(z >= 0 && cX(z) < 9 && cY(z) < 9) {
-				if (spielfeld[cY(z)][cX(z)] < 20 && spielfeld[cY(z)][cX(z)] != 0) {
+			while(z > -1 && cX(z) < 9 && cY(z) < 9) {
+				if (spielfeld[cY(z)][cX(z)] > 19) {
 					break;
 				}
 				moves.add(pos);
 				moves.add(z);
-				if (spielfeld[cY(z)][cX(z)] > 19) {
+				if (spielfeld[cY(z)][cX(z)] < 20 && spielfeld[cY(z)][cX(z)] != 0) {
 					break;
 				}
 				z += +10;
@@ -537,19 +568,19 @@ public class Spiel {
 			break;
 		case 28: // Bauer
 			z = pos + 10;
-			if(z >= 0 && cX(z) < 9 && cY(z) < 9 && (spielfeld[cY(z)][cX(z)] == 0 || spielfeld[cY(z)][cX(z)] > 19)) {
+			if(z > -1 && cX(z) < 9 && cY(z) < 9 && spielfeld[cY(z)][cX(z)] < 19) {
 				moves.add(pos);
 				moves.add(z);
 			}
 			break;
 		case 21: //K�nig
 			z = pos - 9;
-			if (z > 0 && cX(z) < 9 && cY(z) < 9 && 0 == spielfeld[cY(z)] [cX(z)]) {
+			if (z > -1 && cX(z) < 9 && cY(z) < 9 && spielfeld[cY(z)][cX(z)] < 19) {
 				moves.add(pos);
 				moves.add(z);
 			}
 			z = pos - 11;
-			if (z > 0 && cX(z) < 9 && cY(z) < 9 && 0 == spielfeld[cY(z)] [cX(z)]) {
+			if (z > -1 && cX(z) < 9 && cY(z) < 9 && spielfeld[cY(z)][cX(z)] < 19) {
 				moves.add(pos);
 				moves.add(z);
 			}
@@ -559,32 +590,32 @@ public class Spiel {
 		case 38: // Bef�rderter Bauer
 		case 24: // Goldener General
 			z = pos + 11;
-			if (z > 0 && cX(z) < 9 && cY(z) < 9 && 0 == spielfeld[cY(z)] [cX(z)]) {
+			if (z > -1 && cX(z) < 9 && cY(z) < 9 && spielfeld[cY(z)][cX(z)] < 19) {
 				moves.add(pos);
 				moves.add(z);
 			}
 			z = pos + 10;
-			if (z > 0 && cX(z) < 9 && cY(z) < 9 && 0 == spielfeld[cY(z)] [cX(z)]) {
+			if (z > -1 && cX(z) < 9 && cY(z) < 9 && spielfeld[cY(z)][cX(z)] < 19) {
 				moves.add(pos);
 				moves.add(z);
 			}
 			z = pos + 9;
-			if (z > 0 && cX(z) < 9 && cY(z) < 9 && 0 == spielfeld[cY(z)] [cX(z)]) {
+			if (z > -1 && cX(z) < 9 && cY(z) < 9 && spielfeld[cY(z)][cX(z)] < 19) {
 				moves.add(pos);
 				moves.add(z);
 			}
 			z = pos + 1;
-			if (z > 0 && cX(z) < 9 && cY(z) < 9 && 0 == spielfeld[cY(z)] [cX(z)]) {
+			if (z > -1 && cX(z) < 9 && cY(z) < 9 && spielfeld[cY(z)][cX(z)] < 19) {
 				moves.add(pos);
 				moves.add(z);
 			}
 			z = pos - 1;
-			if (z > 0 && cX(z) < 9 && cY(z) < 9 && 0 == spielfeld[cY(z)] [cX(z)]) {
+			if (z > -1 && cX(z) < 9 && cY(z) < 9 && spielfeld[cY(z)][cX(z)] < 19) {
 				moves.add(pos);
 				moves.add(z);
 			}
 			z = pos - 10;
-			if (z > 0 && cX(z) < 9 && cY(z) < 9 && 0 == spielfeld[cY(z)] [cX(z)]) {
+			if (z > -1 && cX(z) < 9 && cY(z) < 9 && spielfeld[cY(z)][cX(z)] < 19) {
 				moves.add(pos);
 				moves.add(z);
 			}
@@ -592,7 +623,7 @@ public class Spiel {
 		}
 		return moves;
 	}
-	
+
 
 
 	public int cX (int p) {
@@ -600,6 +631,6 @@ public class Spiel {
 	}
 
 	public int cY (int p) {
-		return ((p) - ((p) % 10)) / 10;
+		return (p - (p % 10)) / 10;
 	}
 }
