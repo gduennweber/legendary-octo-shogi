@@ -12,9 +12,12 @@ public class LegendaryOctoThinker {
 	public int moveZiel;
 
 	public LegendaryOctoThinker(int[][] sf, int[] ih, int[] dh) {
-		spielfeld = sf.clone();
-		ichHand = ih.clone();
-		duHand = dh.clone();
+		this.spielfeld = new int[sf.length][];
+		for(int i = 0; i < sf.length; i++) {
+			this.spielfeld[i] = sf[i].clone();
+		}
+		this.ichHand = ih.clone();
+		this.duHand = dh.clone();
 	}
 
 	public LegendaryOctoThinker clone() {
@@ -50,7 +53,7 @@ public class LegendaryOctoThinker {
 		if (tiefe == maxTiefe)
 			return evaluatePosition(spiel);
 
-		// check if leaf
+		// children = legalMoves
 		ArrayList<Integer> children = new ArrayList<>();
 		if(isMax)
 			children = spiel.legalMovesIch();
@@ -58,7 +61,7 @@ public class LegendaryOctoThinker {
 			children = spiel.legalMovesDu();
 
 
-
+		// check if leaf
 		if (children.size() == 0) {
 			if (tiefe == 0) {
 				moveOrigin = -1;

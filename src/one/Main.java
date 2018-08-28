@@ -18,6 +18,8 @@ public class Main {
 			System.out.println();
 			meTurn = (!meTurn);
 			System.out.println("hig");
+			for (int j = 0; j < spiel.spielfeld.length; j++)
+				System.out.println(Arrays.toString(spiel.spielfeld[j]));
 		}
 		System.out.println(spiel.lot.evaluatePosition(spiel));
 	}

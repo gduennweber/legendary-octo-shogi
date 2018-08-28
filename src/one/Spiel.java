@@ -18,7 +18,10 @@ public class Spiel {
 
 	public Spiel clone() {
 		Spiel spiel = new Spiel();
-		spiel.spielfeld = this.spielfeld.clone();
+		spiel.spielfeld = new int[this.spielfeld.length][];
+		for(int i = 0; i < this.spielfeld.length; i++) {
+			spiel.spielfeld[i] = this.spielfeld[i].clone();
+		}
 		spiel.ichHand = this.ichHand.clone();
 		spiel.duHand = this.duHand.clone();
 		spiel.lot = this.lot.clone();
