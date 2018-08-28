@@ -31,10 +31,17 @@ public class Spiel {
 	public void doMove(int moveOrigin, int moveZiel) {
 		//System.out.println(moveOrigin + "   --   " + moveZiel);
 		if (moveOrigin < 100) {
-			for(int i = 0; i < 38; i ++) {
-				if(ichHand[i] == 0) {
-					ichHand[i] = spielfeld[cY(moveZiel)][cX(moveZiel)];
-					break;
+			if(spielfeld[cY(moveZiel)][cX(moveZiel)] != 0) { // Wenn eine Figur geschlagen wird
+				for(int i = 0; i < 38; i ++) {
+					if(ichHand[i] == 0) { // Suche erste leere Stelle der Hand
+						if(spielfeld[cY(moveOrigin)][cX(moveOrigin)] < 20) { // Wenn ich ziehe
+							ichHand[i] = spielfeld[cY(moveZiel)][cX(moveZiel)] - 20;
+						}
+						else { // Wenn der Gegner zieht
+							ichHand[i] = spielfeld[cY(moveZiel)][cX(moveZiel)] + 20;
+						}
+						break;
+					}
 				}
 			}
 			spielfeld[cY(moveZiel)][cX(moveZiel)] = spielfeld[cY(moveOrigin)][cX(moveOrigin)];
@@ -102,9 +109,10 @@ public class Spiel {
 	//leer ist null
 	public ArrayList<Integer> legalMovesIchFeld(int figur, int pos){
 		ArrayList<Integer> moves = new ArrayList<>();
+		int z = 0;
 		switch(figur) {
 		case 12: // Drachenturm
-			int z = pos - 11;
+			z = pos - 11;
 			if (z > 0 && cX(z) < 9 && cY(z) < 9 && (0 == spielfeld[cY(z)] [cX(z)] || spielfeld[cY(z)] [cX(z)] > 20)) {
 				moves.add(pos);
 				moves.add(z);

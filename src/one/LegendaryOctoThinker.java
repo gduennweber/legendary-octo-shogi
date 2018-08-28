@@ -27,7 +27,7 @@ public class LegendaryOctoThinker {
 		return lot;
 	}
 
-	public float evaluatePosition(Spiel sp) {
+	public static float evaluatePosition(Spiel sp) {
 		float positionValue = 0;
 		for(int i = 0; i < 9; i++) {
 			for(int j = 0; j < 9; j++) {
@@ -43,9 +43,12 @@ public class LegendaryOctoThinker {
 		return positionValue;
 	}
 
-	public float alphaBetaMinMax(Spiel sp, int maxTiefe, boolean ich) {
+	public float alphaBetaMinMax(Spiel sp, int tiefeIch, int tiefeDu, boolean ich) {
 		Spiel spiel = sp.clone(); // Virtual Spiel
-		return alphaBetaMinMax(spiel, spiel, -999999999.0f, 999999999.0f, 0, maxTiefe, ich);
+		if (ich)
+			return alphaBetaMinMax(spiel, spiel, -999999999.0f, 999999999.0f, 0, tiefeIch, ich);
+		else 
+			return alphaBetaMinMax(spiel, spiel, -999999999.0f, 999999999.0f, 0, tiefeDu, ich);
 	}
 
 	public float alphaBetaMinMax(Spiel spiel, Spiel vsp, float alpha, float beta, int tiefe, int maxTiefe, boolean isMax) {
@@ -56,9 +59,9 @@ public class LegendaryOctoThinker {
 		// children = legalMoves
 		ArrayList<Integer> children = new ArrayList<>();
 		if(isMax)
-			children = spiel.legalMovesIch();
+			children = (ArrayList<Integer>) spiel.legalMovesIch().clone();
 		else
-			children = spiel.legalMovesDu();
+			children = (ArrayList<Integer>) spiel.legalMovesDu().clone();
 
 
 		// check if leaf
@@ -129,7 +132,7 @@ public class LegendaryOctoThinker {
 
 
 
-	public float getValueFigur(int figur) {
+	public static float getValueFigur(int figur) {
 		switch(figur) {
 		// Leer
 		case 0:
